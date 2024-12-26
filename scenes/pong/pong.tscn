@@ -1,0 +1,117 @@
+[gd_scene load_steps=14 format=3 uid="uid://ccefo1ixpaj2"]
+
+[ext_resource type="PackedScene" uid="uid://b5nwngy7y24y5" path="res://scenes/ball/ball.tscn" id="1_2fu27"]
+[ext_resource type="Script" path="res://scenes/pong/pong.gd" id="1_um7do"]
+[ext_resource type="Script" path="res://scenes/ball/ball.gd" id="2_gakb8"]
+[ext_resource type="PackedScene" uid="uid://do4m7v4xypqbc" path="res://scenes/computer/computer.tscn" id="2_i2kso"]
+[ext_resource type="PackedScene" uid="uid://dhmcbmsibohfa" path="res://scenes/player/player.tscn" id="3_bsw24"]
+[ext_resource type="Texture2D" uid="uid://cbdscr1vwm15c" path="res://assets/wall-horizontal.png" id="4_fya25"]
+[ext_resource type="Script" path="res://scenes/computer/computer.gd" id="4_xjtcb"]
+[ext_resource type="Texture2D" uid="uid://i4it88rl1k58" path="res://assets/wall-vertical.png" id="7_xle12"]
+[ext_resource type="Texture2D" uid="uid://denp2rlcpnvqb" path="res://assets/middle-line.png" id="9_biprt"]
+[ext_resource type="FontFile" uid="uid://dxgofg7pnl8fa" path="res://assets/alarm clock.ttf" id="10_no3tc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qdn8m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xxdar"]
+size = Vector2(19, 633)
+
+[sub_resource type="LabelSettings" id="LabelSettings_gmfd0"]
+font = ExtResource("10_no3tc")
+font_size = 32
+
+[node name="Pong" type="Node2D"]
+script = ExtResource("1_um7do")
+
+[node name="Ball" parent="." instance=ExtResource("1_2fu27")]
+script = ExtResource("2_gakb8")
+
+[node name="Computer" parent="." instance=ExtResource("2_i2kso")]
+position = Vector2(1100, 320)
+script = ExtResource("4_xjtcb")
+
+[node name="Player" parent="." instance=ExtResource("3_bsw24")]
+position = Vector2(40, 320)
+
+[node name="ParetDalt" type="StaticBody2D" parent="."]
+position = Vector2(600, 20)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParetDalt"]
+texture = ExtResource("4_fya25")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParetDalt"]
+scale = Vector2(59.44, 1)
+shape = SubResource("RectangleShape2D_qdn8m")
+
+[node name="ParetBaix" type="StaticBody2D" parent="."]
+position = Vector2(587, 634)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParetBaix"]
+texture = ExtResource("4_fya25")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParetBaix"]
+scale = Vector2(59.44, 1)
+shape = SubResource("RectangleShape2D_qdn8m")
+
+[node name="ParetEsquerra" type="Area2D" parent="."]
+position = Vector2(0, 327)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParetEsquerra"]
+texture = ExtResource("7_xle12")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParetEsquerra"]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_xxdar")
+
+[node name="ParetDreta" type="Area2D" parent="."]
+position = Vector2(1143, 327)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParetDreta"]
+texture = ExtResource("7_xle12")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParetDreta"]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_xxdar")
+
+[node name="Middle-line" type="Sprite2D" parent="."]
+position = Vector2(599, 312)
+texture = ExtResource("9_biprt")
+
+[node name="PuntsJugador" type="Label" parent="."]
+offset_left = 497.0
+offset_top = 70.0
+offset_right = 537.0
+offset_bottom = 93.0
+text = "0"
+label_settings = SubResource("LabelSettings_gmfd0")
+
+[node name="PuntsOrdinador" type="Label" parent="."]
+offset_left = 674.0
+offset_top = 78.0
+offset_right = 714.0
+offset_bottom = 112.0
+text = "0"
+label_settings = SubResource("LabelSettings_gmfd0")
+
+[node name="EtiquetaGameOver" type="RichTextLabel" parent="."]
+visible = false
+offset_left = 305.0
+offset_top = 192.0
+offset_right = 896.0
+offset_bottom = 277.0
+theme_override_fonts/normal_font = ExtResource("10_no3tc")
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[center]Aci el tet del guanyador![/center]"
+
+[node name="BotoReinici" type="Button" parent="."]
+visible = false
+offset_left = 523.0
+offset_top = 365.0
+offset_right = 682.0
+offset_bottom = 391.0
+theme_override_fonts/font = ExtResource("10_no3tc")
+text = "Nova partida"
+
+[connection signal="body_entered" from="ParetEsquerra" to="." method="_on_paret_esquerra_body_entered"]
+[connection signal="body_entered" from="ParetDreta" to="." method="_on_paret_dreta_body_entered"]
