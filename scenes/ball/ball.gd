@@ -34,5 +34,6 @@ func _physics_process(delta):
 	if info_colissio:
 		# Fem us del metode bounce del vector velocitat, proporcionant-li
 		# la component normal de la col·lissio.
+		# Aixo ens retorna un vector "reflex", es a dir, un "rebot" de la pilota.
 		velocity=velocity.bounce(info_colissio.get_normal())
 		
