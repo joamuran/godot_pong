@@ -143,7 +143,7 @@ Són cossos estàtics que serveixen per a "rebotar" la pilota. Contenen:
 Quan la pilota xoca amb aquestes parets, que cauen fora del Viewport (en realitat són `Area2D` en lloc de `StaticBody2D`), desencadenen un **senyal** per sumar un punt a l’altre jugador i reiniciar la pilota. S’hi connecten els senyals `body_entered` a mètodes de `pong.gd`.
 
 > [!NOTE] 
-> **Connexió de senyals
+> **Connexió de senyals**
 >
 > Tot i que sembla un concepte complex, les senyals és el mecanisme que tenim per connectar diferents nodes del joc i invocar funcions quan es produeix determinat event.
 >
