@@ -1,12 +1,12 @@
 [gd_scene load_steps=14 format=3 uid="uid://ccefo1ixpaj2"]
 
 [ext_resource type="PackedScene" uid="uid://b5nwngy7y24y5" path="res://scenes/ball/ball.tscn" id="1_2fu27"]
-[ext_resource type="Script" path="res://scenes/pong/pong.gd" id="1_um7do"]
-[ext_resource type="Script" path="res://scenes/ball/ball.gd" id="2_gakb8"]
+[ext_resource type="Script" uid="uid://dlhlqcoslciuk" path="res://scenes/pong/pong.gd" id="1_um7do"]
+[ext_resource type="Script" uid="uid://b1qnxhe5xrr4w" path="res://scenes/ball/ball.gd" id="2_gakb8"]
 [ext_resource type="PackedScene" uid="uid://do4m7v4xypqbc" path="res://scenes/computer/computer.tscn" id="2_i2kso"]
 [ext_resource type="PackedScene" uid="uid://dhmcbmsibohfa" path="res://scenes/player/player.tscn" id="3_bsw24"]
 [ext_resource type="Texture2D" uid="uid://cbdscr1vwm15c" path="res://assets/wall-horizontal.png" id="4_fya25"]
-[ext_resource type="Script" path="res://scenes/computer/computer.gd" id="4_xjtcb"]
+[ext_resource type="Script" uid="uid://hlol2u2hl8ca" path="res://scenes/computer/computer.gd" id="4_xjtcb"]
 [ext_resource type="Texture2D" uid="uid://i4it88rl1k58" path="res://assets/wall-vertical.png" id="7_xle12"]
 [ext_resource type="Texture2D" uid="uid://denp2rlcpnvqb" path="res://assets/middle-line.png" id="9_biprt"]
 [ext_resource type="FontFile" uid="uid://dxgofg7pnl8fa" path="res://assets/alarm clock.ttf" id="10_no3tc"]
@@ -25,6 +25,7 @@ script = ExtResource("1_um7do")
 metadata/_edit_vertical_guides_ = [576.0]
 
 [node name="Ball" parent="." instance=ExtResource("1_2fu27")]
+position = Vector2(578, 409)
 script = ExtResource("2_gakb8")
 
 [node name="Computer" parent="." instance=ExtResource("2_i2kso")]

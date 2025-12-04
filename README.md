@@ -142,37 +142,40 @@ Són cossos estàtics que serveixen per a "rebotar" la pilota. Contenen:
 
 Quan la pilota xoca amb aquestes parets, que cauen fora del Viewport (en realitat són `Area2D` en lloc de `StaticBody2D`), desencadenen un **senyal** per sumar un punt a l’altre jugador i reiniciar la pilota. S’hi connecten els senyals `body_entered` a mètodes de `pong.gd`.
 
-!!! note "Connexió de senyals"
-    Tot i que sembla un concepte complex, les senyals és el mecanisme que tenim per connectar diferents nodes del joc i invocar funcions quan es produeix determinat event.
-
-    Aquesta connexió de senyals es pot establir bé des de l'editor o bé des del propi codi. En aquest cas de les parets es fa des de l'editor. Si seleccionem en l'escena el node `ParetDreta` per exemple, ens situem a l'Inspector i seleccionem la pestanya **Node**. Veurem baix d'aquesta pestanya que tenim les diferents *Senyals* que pot capturar el node seleccionat, en aquest cas, l'`Area2D`, ja siga directament, o a través de les seues classes pare (observeu que l'herència de l'*Area2D* es correspon a l'agrupació de senyals).
-
-    ![Connexió de senyals](img/pong/senyals.png)
-
-    Si ens fixem la senyal `body_entered` de l'`Àrea2D` té associada una funció `on_paret_dreta_body_entered()`, ubicada al fixer `pong.gd`. Quan fem doble clic sobre aquest event `body_entered` ens apareix una finestra com la que teniu a la dreta, des de la qual podem triar o generar la funció que volem que s'execute en produir-se aquest esdeveniment.
-
-    En definitiva, quan volem que un node responga de certa manera a un esdeveniment, el que hem de fer és seleccionar-lo, buscar quin esdeveniment volem detectar i associar-li la senyal o invocació a la funció.
+> [!NOTE] 
+> **Connexió de senyals
+>
+> Tot i que sembla un concepte complex, les senyals és el mecanisme que tenim per connectar diferents nodes del joc i invocar funcions quan es produeix determinat event.
+>
+> Aquesta connexió de senyals es pot establir bé des de l'editor o bé des del propi codi. En aquest cas de les parets es fa des de l'editor. Si seleccionem en l'escena el node `ParetDreta` per exemple, ens situem a l'Inspector i seleccionem la pestanya **Node**. Veurem baix d'aquesta pestanya que tenim les diferents *Senyals* que pot capturar el node seleccionat, en aquest cas, l'`Area2D`, ja siga directament, o a través de les seues classes pare (observeu que l'herència de l'*Area2D* es correspon a l'agrupació de senyals).
+>
+> ![Connexió de senyals](img/pong/senyals.png)
+>
+> Si ens fixem la senyal `body_entered` de l'`Àrea2D` té associada una funció `on_paret_dreta_body_entered()`, ubicada al fixer `pong.gd`. Quan fem doble clic sobre aquest event `body_entered` ens apareix una finestra com la que teniu a la dreta, des de la qual podem triar o generar la funció que volem que s'execute en produir-se aquest esdeveniment.
+>
+> En definitiva, quan volem que un node responga de certa manera a un esdeveniment, el que hem de fer és seleccionar-lo, buscar quin esdeveniment volem detectar i associar-li la senyal o invocació a la funció.
 
 ## Anàlisi dels scripts
 
 Una vegada hem vist com es distribueixen les diferents escenes i nodes, anem a veure la lògica dels scripts que els controlen.
 
-!!! note "Sobre els scripts"
-
-    La primera línia d'un script en GDScvript conté la instrucció `extends`, i ens indica quin tipus de node o classe estem ampliant (estenent). És a dir, el nostre script serà una classe especialitzada d'un tipus de node, al que li afig funcionalitat addicional. D'aquesta manera, des del nostre script podem accedir a les funcionalitats específiques que ens proporciona el node del que derivem i tots els seus antecessors. 
-
-    Per exemple, si estenem una calasse de `CharacterBody2D`, podrem accedir a mètodes i propietats d'aquesta, com `move_and_slide`, `move_and_collide`, `velocity`, etc.
-
-    Després, als nostres scripts, personalitzarem el comportament definint un conjunt de funcions (mètodes) que el motor crida en moments concrets de l’execució, així com d’altres que creem per a finalitats específiques. Aquests mètodes ens permeten *enganxar-nos* al cicle de vida dels nodes i interactuar amb el joc. Veiem un resum de les funcions més comunes:
-
-    * **`_ready()`**: S'invoca just després que un node i tots els seus fills estiguen creats i preparats. És útil per realitzar accions d’inicialització, accedir a nodes fills o connectar senyals a altres nodes.
+> [!NOTE]
+> **Sobre els scripts**
+> La primera línia d'un script en GDScvript conté la instrucció `extends`, i ens indica quin tipus de node o classe estem ampliant (estenent). És a dir, el nostre script serà una classe especialitzada d'un tipus de node, al que li afig funcionalitat addicional. D'aquesta manera, des del nostre script podem accedir a les funcionalitats específiques que ens proporciona el node del que derivem i tots els seus antecessors. 
+>
+> Per exemple, si estenem una calasse de `CharacterBody2D`, podrem accedir a mètodes i propietats d'aquesta, com `move_and_slide`, `move_and_collide`, `velocity`, etc.
+>
+> Després, als nostres scripts, personalitzarem el comportament definint un conjunt de funcions (mètodes) que el motor crida en moments concrets de l’execució, així com d’altres que creem per a finalitats específiques. Aquests mètodes ens permeten *enganxar-nos* al cicle de vida dels nodes i interactuar amb el joc. Veiem un resum de les funcions més comunes:
+> 
+>* **`_ready()`**: S'invoca just després que un node i tots els seus fills estiguen creats i preparats. És útil per realitzar accions d’inicialització, accedir a nodes fills o connectar senyals a altres nodes.
     Només s’executa una vegada, quan l’escena s’instancia o el node s’afegeix a l’escena.
-    * **`_process(delta)`**: Es crida cada frame (cada vegada que s’actualitza la pantalla). Normalment, es fa servir per actualitzar lògics no crítiques de física o animacions basades en el temps. El paràmetre `delta` indica els segons transcorreguts des de l’anterior frame (per fer animacions independents del *framerate*).
-    *  **`_physics_process(delta)`**: Es crida cada frame de física (de forma predeterminada, 60 vegades per segon). S’utilitza quan hem de fer càlculs o moviments amb col·lisions (com `move_and_collide` o `move_and_slide` en 2D). És on habitualment actualitzem velocitats, posicions o tractem col·lisions de manera precisa i consistent.
-         * *Relació entre `_process(delta)` i `_physics_process(delta)`:* `_process(delta)` està orientada a tasques de renderització o lògica de joc no vinculada a la física. `_physics_process(delta)` és la versió orientada a la física, on volem assegurar que els càlculs de col·lisió i moviment siguen consistents a la taxa de refresc de física (normalment 60 fps de física). Si treballem en 2D i fem ús de `CharacterBody2D`, les funcions com `move_and_collide` o `move_and_slide` solen col·locar-se a `_physics_process(delta)` per mantenir lògiques físiques deterministes.
-    * **`_input(event)`**: Es crida cada vegada que es rep un event d’entrada (teclat, ratolí, joystick, etc.). Permet filtrar events específics sense haver d’usar constantment `Input.is_key_pressed` dins de `_process`.
-    * **Funcions pròpies opersonalitzades**:  Qualsevol funció que definim amb un nom determinat (per exemple: `func rebotar()`, `func reset()`, etc.). Són cridades o bé des d’altres funcions nostres, bé per senyals, o bé per codi extern.
-    * **Altres callbacks**: Existeixen altres funcions com `_enter_tree()`, `_exit_tree()`, `_notification()`, etc. que són mètodes menys freqüents i que serveixen per a situacions més concretes (per exemple, `_enter_tree()` s'invoca quan el node entra a l’escena, abans del `_ready()`).
+> * **`_process(delta)`**: Es crida cada frame (cada vegada que s’actualitza la pantalla). Normalment, es fa servir per actualitzar lògics no crítiques de física o animacions basades en el temps. El paràmetre `delta` indica els segons transcorreguts des de l’anterior frame (per fer animacions independents del *framerate*).
+> *  **`_physics_process(delta)`**: Es crida cada frame de física (de forma predeterminada, 60 vegades per segon). S’utilitza quan hem de fer càlculs o moviments amb col·lisions (com `move_and_collide` o `move_and_slide` en 2D). És on habitualment actualitzem velocitats, posicions o tractem col·lisions de manera precisa i consistent.
+> * *Relació entre `_process(delta)` i `_physics_process(delta)`:* `_process(delta)` està orientada a tasques de renderització o lògica de joc no vinculada a la física. `_physics_process(delta)` és la versió orientada a la física, on volem assegurar que els càlculs de col·lisió i moviment siguen consistents a la taxa de refresc de física (normalment 60 fps de física). Si treballem en 2D i fem ús de `CharacterBody2D`, les funcions com `move_and_collide` o `move_and_slide` solen col·locar-se a `_physics_process(delta)` per mantenir lògiques físiques deterministes.
+> **`_input(event)`**: Es crida cada vegada que es rep un event d’entrada (teclat, ratolí, joystick, etc.). Permet filtrar events específics sense haver d’usar constantment `Input.is_key_pressed` dins de `_process`.
+> **Funcions pròpies opersonalitzades**:  Qualsevol funció que definim amb un nom determinat (per exemple: `func rebotar()`, `func reset()`, etc.). Són cridades o bé des d’altres funcions nostres, bé per senyals, o bé per codi extern.
+> **Altres callbacks**: Existeixen altres funcions com `_enter_tree()`, `_exit_tree()`, `_notification()`, etc. que són mètodes menys freqüents i que serveixen per a situacions més concretes (per exemple, `_enter_tree()` s'invoca quan el node entra a l’escena, abans del `_ready()`).
+>
 
 Recordeu que perquè tinguen efecte, els scripts han d'anar associats als nodes. Godot té la particularitat, a diferència d'altres motors, que un node només pot tindre associat un script, la qual cosa ens ajudarà a evitar errors o comportaments inesperats, ja que tenim centralitzat tot el control sobre un node.
 
@@ -259,8 +262,11 @@ Com veiem, el que fem és llegir el teclat (tecles `Q` i `A`) per a moure la pal
 
 Finalment, el mètode `move_and_collide` mou el personatge i gestiona les col·lissions que puguen haver.
 
-!!! note "Sobre el sistema d'entrada"
-    Podeu trobar més informació sobre el sistema d'entrada (Input) a l'article [Ejemplo de Input, de la documentació oficial de Godot](https://docs.godotengine.org/es/4.x/tutorials/inputs/input_examples.html).
+> [!NOTE] 
+> **Sobre el sistema d'entrada**
+>
+> Podeu trobar més informació sobre el sistema d'entrada (Input) a l'article [Ejemplo de Input, de la documentació oficial de Godot](https://docs.godotengine.org/es/4.x/tutorials/inputs/input_examples.html).
+>
 
 ### `computer.gd` (control del "jugador 2" per ordinador)
 
@@ -300,8 +306,11 @@ func _physics_process(delta):
     move_and_collide(velocity * delta)
 ```
 
-!!! note "Script player2.gd (control alternatiu per a un segon jugador)"
-    L'script `player2.gd` té un codi molt semblant al `player1.gd`, i si l'associem al node *Computer* en lloc de `computer.gd`, ens permetrà controlar la segona paleta amb les tecles `P` i `L`, per poder jugar a dobles.
+> [!NOTE] 
+> **Script player2.gd (control alternatiu per a un segon jugador)**
+>
+> L'script `player2.gd` té un codi molt semblant al `player1.gd`, i si l'associem al node *Computer* en lloc de `computer.gd`, ens permetrà controlar la segona paleta amb les tecles `P` i `L`, per poder jugar a dobles.
+>
 
 ### `pong.gd` (control principal del joc)
 
@@ -347,8 +356,11 @@ El fet d'usar `Callable` en lloc del nom de la funció directament ens aporta di
 * **Flexibilitat**: El `Callable` permet encapsular no només la funció, sinó també l’objecte on s’ha d’executar. Això és útil si volem que la senyal execute funcions en altres nodes, no només en *self*.
 * **Seguretat**: Si el node o la funció no existeixen, obtindrem errors més clars.
 
-!!! note "Documentació sobre senyals"
-    Podeu trobar informació sobre senyals a la documentació [oficial de Godot](https://docs.godotengine.org/es/4.x/getting_started/step_by_step/signals.html).
+> [!NOTE] 
+> **Documentació sobre senyals**
+>
+> Podeu trobar informació sobre senyals a la documentació [oficial de Godot](https://docs.godotengine.org/es/4.x/getting_started/step_by_step/signals.html).
+>
 
 Continuem amb la resta de codi. Veiem ara la funció personalitzada `_on_paret_esquerra_body_entered(body)`:
 
@@ -365,18 +377,21 @@ Aquesta funció és executada per la senyal `body_entered` del node `ParetEsquer
 
 Quan s'invoca la funció, ens assegurem que el cos que ha col·lisionat amb la paret és la pilota (ja que les parets també estan col·lisisonant entre sí). Tot i que és un aspecte que es pot resoldre amb capes, com veurem més endavant al curs, aquesta és una manera d'assegurar-nos que la col·lissió es produeix amb el tipus d'objecte que volem.
 
-!!! note "Sobre la detecció de col·issions"
-    A més de `body_entered`, que es dispara quan un cos entra en un node Area2D o col·lisiona amb un CollisionShape2D, hi ha altres senyals i formes comunes de detectar col·lisions:
-
-    * `area_entered` i `area_exited`: Es disparen quan un node Area2D entra o ix d’una altra àrea. Això és útil per a zones d’interacció, activadors o trampes.
-    * `body_exited`, es dispara quan un cos ix de la col·lisió amb una Area2D. És similar a body_entered, però indica quan deixa d’haver una col·lisió. 
-    * `get_overlapping_bodies()` i `get_overlapping_areas()` ens permet monitoritzar també, de manera constant si dos cossos o àrees estan col·lissionant o sol·lapades.
-
-    Vist d'altra manera, podem detercar col·lissions, principalment, de tres maneres:
-
-    * Quan comença la col·lisió, amb `body_entered` o `area_entered`, 
-    * Mentre dura la col·lisió, monitoritzant amb `get_overlapping_bodies` o `get_overlapping_areas`, o
-    * Quan finalitza la col·lisió, amb `body_exited` i `area_exited`
+> [!NOTE] 
+> **Sobre la detecció de col·issions**
+>
+> A més de `body_entered`, que es dispara quan un cos entra en un node Area2D o col·lisiona amb un CollisionShape2D, hi ha altres senyals i formes comunes de detectar col·lisions:
+>
+> * `area_entered` i `area_exited`: Es disparen quan un node Area2D entra o ix d’una altra àrea. Això és útil per a zones d’interacció, activadors o trampes.
+> * `body_exited`, es dispara quan un cos ix de la col·lisió amb una Area2D. És similar a body_entered, però indica quan deixa d’haver una col·lisió. 
+> * `get_overlapping_bodies()` i `get_overlapping_areas()` ens permet monitoritzar també, de manera constant si dos cossos o àrees estan col·lissionant o sol·lapades.
+>
+> Vist d'altra manera, podem detercar col·lissions, principalment, de tres maneres:
+>
+> * Quan comença la col·lisió, amb `body_entered` o `area_entered`, 
+> * Mentre dura la col·lisió, monitoritzant amb `get_overlapping_bodies` o `get_overlapping_areas`, o
+> * Quan finalitza la col·lisió, amb `body_exited` i `area_exited`
+>
 
 Si l'objecte que ha entrat en col·lissió és la pilota, com que és la paret esquerra (la de darrere del jugador), el que fem és:
 

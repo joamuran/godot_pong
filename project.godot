@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="Pong"
-run/main_scene="res://scenes/pong/pong.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+run/main_scene="uid://ccefo1ixpaj2"
+config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://assets/icon.svg"
+config/main_scene="res://scenes/pong/pong.tscn"
 
 [display]
 
